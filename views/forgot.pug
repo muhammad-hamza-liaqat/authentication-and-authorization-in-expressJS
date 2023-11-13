@@ -1,6 +1,6 @@
 html
   head
-    title Registration Form
+    title Forgot Password
     style.
       body {
         font-family: 'Arial', sans-serif;
@@ -34,7 +34,7 @@ html
       button {
         width: 100%;
         padding: 10px;
-        background-color: #27ae60;
+        background-color: #3498db;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -42,12 +42,12 @@ html
       }
 
       button:hover {
-        background-color: #219653;
+        background-color: #2980b9;
       }
-  body
-    form(action="http://localhost:3000/register" method="post")
-      input(type="text" name="name" placeholder="Enter Username")
-      input(type="text" name="email" placeholder="Email")
-      input(type="password" name="password" placeholder="Password")
-      button(type="submit") Create User
 
+  body
+    form(action="http://localhost:3000/forgot" method="post")
+      h1 Reset Password
+      input(type="email" name="email" placeholder="Enter your email here!")
+      input(type="newPassword" name="newPassword" placeholder="Enter your newPassword here!")
+      button(type="submit") Reset Password

@@ -24,10 +24,10 @@ routes.get("/register-user", async (req, res) => {
 // form handling route
 routes.post("/register", async (req, res) => {
   try {
-    // generating unique verification token 
+    // generating unique verification token
     const verificationToken = uuidv4();
     // creating user..
-    const hashedPassword = await bcrypt.hash(req.body.password,10);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const newUser = await userDB.create({
       ...req.body,
       password: hashedPassword,
@@ -54,7 +54,7 @@ routes.post("/register", async (req, res) => {
       }
     });
 
-    console.log("user created!",newUser);
+    console.log("user created!");
     // res.redirect("/");
   } catch (error) {
     console.log("error while creating the user", error);
@@ -75,10 +75,10 @@ routes.get("/verify/:token", async (req, res) => {
     await user.save();
     res.send("account verified successfully");
   } catch (error) {
-    res.status(500).json({ error: "internal server error" });
+    res
+      .status(500)
+      .json({ error: "account not verified!, Internal Server Error!" });
   }
 });
-
-
 
 module.exports = routes;

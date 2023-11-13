@@ -2,17 +2,15 @@ const express = require("express");
 const loginRoutes = express.Router();
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 // login routes...
 loginRoutes.get("/", async (req, res) => {
   res.render("login");
-// res.render('login', { title: 'Login Page' });
-
 });
 
 loginRoutes.post("/login-check", async (req, res) => {
-    console.log(req.body)
+  console.log(req.body);
 
   let user = await userModel.findOne({ email: req.body.email });
   if (!user) {
@@ -25,10 +23,27 @@ loginRoutes.post("/login-check", async (req, res) => {
   if (!isValid) {
     return res.status(401).send("invalid password");
   }
-  let token = jwt.sign({_id:user._id,name: user.name}, "someprivatekey");
+  if (!user.isVerified) {
+    return res
+      .status(404)
+      .send({ message: "user is not verified! please verify!" });
+  }
+
+  let token = jwt.sign(
+    { _id: user._id, name: user.name },
+    "my private JWT TOKEN",
+    { expiresIn: "20s" }
+  );
+
   // console.log("jwt token: ",token);
-  res.send(token)
+  res.send(token);
   // res.send("logged in successfully!");
 });
 
 module.exports = loginRoutes;
+
+
+// jwt token for testing purpose.
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRmZWMyZWMzNjFkNDcxMGRmOGFmY2EiLCJuYW1lIjoiTXVoYW1tYWQgSGFtemEgTGlhcWF0IEFsaSIsImlhdCI6MTY5OTg2MDcyMSwiZXhwIjoxNjk5ODYwNzQxfQ.J6Ra7MM1O8c-5kLx-ILCzKcmCtYYKhWS_KpMcHjgngs
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRmZWMyZWMzNjFkNDcxMGRmOGFmY2EiLCJuYW1lIjoiTXVoYW1tYWQgSGFtemEgTGlhcWF0IEFsaSIsImlhdCI6MTY5OTg2MDc1NCwiZXhwIjoxNjk5ODYwNzc0fQ.9Gqyl1tgYQWOMa7SRZZ6SQt7o3GfTGHyCCTyfNSBYlY

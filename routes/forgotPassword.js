@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 const app = express();
 
 forgot.get("/", (req, res) => {
-  res.end("password endpoint");
+  // res.end("password endpoint");
+  res.render("forgot");
 });
 
 forgot.post("/", async (req, res) => {
