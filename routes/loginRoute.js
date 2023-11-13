@@ -10,7 +10,7 @@ loginRoutes.get("/", async (req, res) => {
 });
 
 loginRoutes.post("/login-check", async (req, res) => {
-  console.log(req.body);
+  // res.send(req.body);
 
   let user = await userModel.findOne({ email: req.body.email });
   if (!user) {
@@ -28,22 +28,20 @@ loginRoutes.post("/login-check", async (req, res) => {
       .status(404)
       .send({ message: "user is not verified! please verify!" });
   }
-
+// {payload}, "secret key", optional callbacks?
+// 32 characters of string -> secret key, the longer the better
   let token = jwt.sign(
     { _id: user._id, name: user.name },
     "my private JWT TOKEN",
     { expiresIn: "20s" }
   );
+  const verifyToken = jwt.verify(token, "my private JWT TOKEN")
 
   // console.log("jwt token: ",token);
   res.send(token);
+  // res.send(verifyToken);
   // res.send("logged in successfully!");
+  
 });
 
 module.exports = loginRoutes;
-
-
-// jwt token for testing purpose.
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRmZWMyZWMzNjFkNDcxMGRmOGFmY2EiLCJuYW1lIjoiTXVoYW1tYWQgSGFtemEgTGlhcWF0IEFsaSIsImlhdCI6MTY5OTg2MDcyMSwiZXhwIjoxNjk5ODYwNzQxfQ.J6Ra7MM1O8c-5kLx-ILCzKcmCtYYKhWS_KpMcHjgngs
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTRmZWMyZWMzNjFkNDcxMGRmOGFmY2EiLCJuYW1lIjoiTXVoYW1tYWQgSGFtemEgTGlhcWF0IEFsaSIsImlhdCI6MTY5OTg2MDc1NCwiZXhwIjoxNjk5ODYwNzc0fQ.9Gqyl1tgYQWOMa7SRZZ6SQt7o3GfTGHyCCTyfNSBYlY
